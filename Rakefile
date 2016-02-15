@@ -115,7 +115,7 @@ end
 
 desc 'Generate the site using the defined profile, or development if none is given'
 task :gen, [:profile] => :check do |task, args|
-  run_awestruct "-P #{args[:profile] || 'development'} -g --force -q"
+  run_awestruct "-P #{args[:profile] || 'development'} -g --force -q -w"
 end
 
 desc "Push local commits to #{$remote}/master"
@@ -163,7 +163,7 @@ task :internal_deploy_task, [:profile, :tag_name] do |task, args|
   # Delay awestruct failing the build until after we rsync files, if we are staging.
   # Allows errors to be viewed
   begin
-    run_awestruct "-P #{args[:profile]} -g --force"
+    run_awestruct "-P #{args[:profile]} -g --force -w"
   rescue
     if args[:profile] != 'production'
       msg 'awestruct_failed'
@@ -321,6 +321,15 @@ task :reap_old_pulls_docker do |task|
   reap = GitHub.list_closed_pulls($github_org, $github_repo)
   Reaper.kill_and_remove_prs(reap)
 end
+
+desc "Kill a particular pull request, helpful as docker compose wont stop 'run' commands"
+task :reap_pr_docker, [:pr] do |task, args|
+  pr = args[:pr]
+  puts "Going to kill #{pr}"
+  as_array = [pr]
+  Reaper.kill_and_remove_prs(as_array)
+end
+
 
 desc 'Remove staged pull builds for pulls closed more than 7 days ago'
 task :reap_old_pulls, [:pr_prefix] do |task, args|
