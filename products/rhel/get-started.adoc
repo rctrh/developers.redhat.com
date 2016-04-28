@@ -3,13 +3,25 @@
 :linkattrs:
 
 ## Step1 Title
-Download Red Hat Enterprise Linux
-
-## Step2 Title
-Install Red Hat Enterprise Linux
+Download Red Hat Enterprise Linux (RHEL)
 
 ## Step3 Title
 Get ready for software development
+
+## Step2 Baremetal Title
+Install RHEL on Bare Metal
+
+## Step2 Hyperv Title
+Install RHEL on Hyper-V
+
+## Step2 Virtualbox Title
+Install RHEL on VirtualBox
+
+## Step2 Vmware Title
+Install RHEL on VMware
+
+## Step2 KVM Title
+Install RHEL on KVM
 
 ## Step4 Title
 Build something today
@@ -2103,6 +2115,9 @@ http://developerblog.redhat.com/[http://developerblog.redhat.com, window='_blank
 [[troubleshooting]]Troubleshooting and FAQ
 
 ## Faq section
+. Where can I find information about no-cost subscriptions for developers?
++
+See link:#{site.base_url}/articles/no-cost-rhel-faq/[Frequently asked questions: no-cost Red Hat Enterprise Linux Developer Suite subscription].
 . My system is unable to download updates from Red Hat.
 +
 Your system must be registered with Red Hat using `subscription-manager register`. You need to have a current Red Hat subscription.
