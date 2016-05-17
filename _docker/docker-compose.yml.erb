@@ -31,7 +31,7 @@ services:
     command:
       - "rake git_setup clean preview_no_reload[docker]"
     ports:
-      - "4242:4242"
+      - "4242"
     links:
       - drupal
       - searchisko
@@ -62,10 +62,8 @@ services:
     build: ./awestruct
     command:
       - "rake git_setup clean preview[docker]"
+<% unless ENV['JENKINS_HOME'] %>
     ports:
-<% if ENV.key? 'AWESTRUCT_HOST_PORT' %>
-      - "<%=ENV['AWESTRUCT_HOST_PORT']%>:4242"
-<% else %>
       - "4242:4242"
 <% end %>
     links:
@@ -110,8 +108,8 @@ services:
     links:
       - drupalmysql
     volumes:
-      - ../images:/tmp/images
-      - ../stylesheets:/tmp/stylesheets
+      - ../images:/var/www/html/images
+      - ../stylesheets/fonts:/var/www/html/fonts
     <% unless ENV['JENKINS_HOME'] %>
       - ./drupal/themes/:/var/www/html/themes
       - ./drupal/modules/custom/:/var/www/html/modules/custom
@@ -163,7 +161,7 @@ services:
     expose:
       - "4444"
     ports:
-      - "<%= ENV['SELENIUM_HUB_PORT'] %>:4444"
+      - "4444"
     privileged: true
     environment:
       - GRID_BROWSER_TIMEOUT=100000
