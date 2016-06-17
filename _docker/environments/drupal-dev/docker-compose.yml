@@ -42,7 +42,6 @@ services:
       - drupalmysql
       - searchisko
     volumes:
-      - ./rhd.settings.yml:/var/www/drupal/web/sites/default/rhd.settings.yml
       - ../../drupal:/var/www/drupal
       - ../../../images:/var/www/drupal/web/images:ro
       - ../../../stylesheets/fonts:/var/www/drupal/web/fonts:ro
@@ -102,18 +101,22 @@ services:
   #
   # Testing
   #
+  unit_tests:
+   build: ../../awestruct
+   volumes:
+    - ../../../:/home/awestruct/developer.redhat.com
+   entrypoint: "bundle exec rake test"
+
   acceptance_tests:
     build: ../../awestruct
     volumes:
       - ../../../:/home/awestruct/developer.redhat.com
-#    links:
-#      - selhub:hub
     environment:
       - ghprbActualCommit
       - github_status_api_token
       - PARALLEL_TEST
       - CUCUMBER_TAGS
-      - SELENIUM_HOST=http://hub:4444/wd/hub
+      - SELENIUM_HOST=http://selhub:4444/wd/hub
       - RHD_JS_DRIVER
       - RHD_DOCKER_DRIVER
       - BUILD_URL
