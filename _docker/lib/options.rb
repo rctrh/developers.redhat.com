@@ -58,11 +58,13 @@ class Options
       opts.on('-g', '--generate', 'Run awestruct (clean gen)') do |r|
         tasks[:decrypt] = true
         tasks[:awestruct_command_args] = %w(--rm --service-ports awestruct)
+        tasks[:supporting_services] = []
       end
 
       opts.on('-p', '--preview', 'Run awestruct (clean preview)') do |r|
         tasks[:decrypt] = true
         tasks[:awestruct_command_args] = ['--rm', '--service-ports', 'awestruct', "rake git_setup clean preview[docker]"]
+        tasks[:supporting_services] = []
       end
 
       opts.on('--stage-pr PR_NUMBER', Integer, 'build for PR Staging') do |pr|
@@ -115,6 +117,11 @@ class Options
         tasks[:kill_all] = true
         tasks[:awestruct_command_args] = %w(--rm --service-ports awestruct)
       end
+
+      opts.on('--no-decrypt','Do not attempt to decrypt the secrets file (secrets are set in the environment)') do
+        tasks[:decrypt] = false
+      end
+
 
       # No argument, shows at tail.  This will print an options summary.
       opts.on_tail('-h', '--help', 'Show this message') do

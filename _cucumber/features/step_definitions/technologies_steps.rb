@@ -11,7 +11,8 @@ end
 
 Then(/^I should see a description of available products$/) do
   @product_ids.each do |product|
-    expect(@page.technologies.product_description_for(product)).to include(get_product(product, 'description'))
+   desc = @page.technologies.product_description_for(product)
+   desc.gsub("’" , "'").should == get_product(product, 'description')
   end
 end
 
@@ -21,9 +22,20 @@ Then(/^each product title should link to the relevant product overview page$/) d
   end
 end
 
-Then(/^I should see a 'Get started' button for each available product$/) do
+When(/^products have a Get Started link available$/) do
+end
+
+Then(/^I should see a 'Get started' button for each product$/) do
   @product_ids.each do |product|
+    if product == 'openjdk'
+      expect(@page.technologies.get_started_button_for(product)).to include "#{$host_to_test}/products/#{product}/overview/"
+    elsif @products_with_get_started.include?(product)
     expect(@page.technologies.get_started_button_for(product)).to include "#{$host_to_test}/products/#{product}/get-started/"
+    elsif !@products_with_get_started.include?(product) && !@technologies_with_downloads.include?(product)
+      expect(@page.technologies.get_started_button_for(product)).to include "#{$host_to_test}/products/#{product}/overview/"
+    else
+      expect(@page.technologies.get_started_button_for(product)).to include "#{$host_to_test}/products/#{product}/download"
+    end
   end
 end
 
@@ -49,7 +61,7 @@ When(/^the products have Downloads available$/) do
 end
 
 Then(/^I should see a 'Downloads' link for each product$/) do
-  products_with_downloads = @technologies_with_downloads - ['mobileplatform']
+  products_with_downloads = @technologies_with_downloads - ['mobileplatform','openjdk', 'dotnet']
   products_with_downloads.each do |product|
     expect(@page.technologies.download_button_for(product)).to include "#{$host_to_test}/products/#{product}/download/"
   end

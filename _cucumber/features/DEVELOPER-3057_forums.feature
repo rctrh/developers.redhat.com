@@ -6,6 +6,7 @@ Feature: DEVELOPER-3057 - Forums: Product forums landing page
       | ACCELERATED DEVELOPMENT AND MANAGEMENT |
       | INFRASTRUCTURE                         |
       | INTEGRATION AND AUTOMATION             |
+      | RUNTIMES                               |
     And I should see the following forum products:
       | Red Hat JBoss Data Grid                       |
       | Red Hat JBoss Developer Studio                |
@@ -19,7 +20,8 @@ Feature: DEVELOPER-3057 - Forums: Product forums landing page
       | Red Hat JBoss BPM Suite                       |
       | Red Hat JBoss Data Virtualization             |
       | Red Hat JBoss Fuse                            |
-   And I should see a description of the available products
+      | .NET Runtime for Red Hat Linux                          |
+    And I should see a description of the available products
 
   Scenario: Each available product title should link to the relevant product forum page
     Given I am on the Product forums page
@@ -36,4 +38,5 @@ Feature: DEVELOPER-3057 - Forums: Product forums landing page
       | Red Hat JBoss BPM Suite                       |
       | Red Hat JBoss Data Virtualization             |
       | Red Hat JBoss Fuse                            |
+      | .NET Runtime for Red Hat Linux                          |
     And each product title should link to the relevant product forum page
