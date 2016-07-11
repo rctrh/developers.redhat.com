@@ -111,7 +111,7 @@ class TestOptions < Minitest::Test
   def test_kill_drupal_dev
     tasks = Options.parse (['-e drupal-dev',"-r"])
     assert(tasks[:kill_all])
-    assert_equal(tasks[:supporting_services], %w(mysql searchisko drupalmysql drupal))
+    assert_equal(tasks[:supporting_services], %w(apache mysql searchisko drupalmysql drupal))
     assert_equal(nil, tasks[:awestruct_command_args])
   end
 
@@ -200,7 +200,7 @@ class TestOptions < Minitest::Test
       assert_equal('true', ENV['PARALLEL_TEST'])
       assert_equal('docker_chrome', ENV['RHD_JS_DRIVER'])
       assert_equal('mechanize', ENV['RHD_DEFAULT_DRIVER'])
-      assert_equal(["--rm", "--service-ports", "acceptance_tests", "bundle exec rake features HOST_TO_TEST=#{ENV['HOST_TO_TEST']} RHD_JS_DRIVER=#{ENV['RHD_DOCKER_DRIVER']}"], tasks[:acceptance_test_target_task])
+      assert_equal(["--rm", "--service-ports", "acceptance_tests", "bundle exec rake features HOST_TO_TEST=#{ENV['HOST_TO_TEST']} RHD_JS_DRIVER=#{ENV['RHD_DOCKER_DRIVER']} RHD_TEST_PROFILE=#{ENV['RHD_TEST_PROFILE']}"], tasks[:acceptance_test_target_task])
     end
   end
 
@@ -285,7 +285,7 @@ class TestOptions < Minitest::Test
     assert(tasks[:kill_all])
     assert(tasks[:decrypt])
     assert_equal(tasks[:unit_tests], expected_unit_test_tasks)
-    assert_equal(%w(mysql searchisko drupalmysql drupal), tasks[:supporting_services])
+    assert_equal(%w(apache mysql searchisko drupalmysql drupal), tasks[:supporting_services])
     assert_equal(['--rm', '--service-ports', 'awestruct'], tasks[:awestruct_command_args])
   end
 
