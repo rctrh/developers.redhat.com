@@ -29,6 +29,21 @@ search.service('searchService',function($http, $q) {
 });
 
 /*
+  Directive to add target=_blank to KCS and solutions
+ */
+search.directive('resourceType', function () {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      if(attrs.resourceType == 'solution')
+        element.attr("target", "_blank");
+      else
+        element.attr("target", "_self");
+    }
+  };
+});
+
+/*
   Filter to return human readable time ago
 */
 search.filter('timeAgo', function() {
@@ -103,6 +118,21 @@ search.filter('jbossfix', function() {
       return url.replace(matcher,'https://developer.redhat.com')
     }
     return url;
+  }
+});
+
+/*
+ Filter to remove undesirable tags from sys_tags
+ */
+search.filter('tagGroup', function() {
+  return function(tag){
+    var modifiedTags = [];
+    var matcher = new RegExp('feed_group_name_.*|feed_name_.*|red hat|redhat')
+    angular.forEach(tag, function(value){
+      if(!value.match(matcher))
+        modifiedTags.push(value)
+    });
+    return modifiedTags;
   }
 });
 

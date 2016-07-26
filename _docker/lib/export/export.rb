@@ -5,6 +5,8 @@ require_relative 'drupal_page_url_list_generator'
 require_relative 'httrack_export_strategy'
 require_relative 'static_export_rsync'
 require_relative 'export_inspector'
+require_relative 'export_archiver'
+require_relative 'export_archive_pruner'
 
 #
 # Class that acts as a controller of the export process from Drupal
@@ -34,8 +36,11 @@ class Export
     url_list = @page_url_list_generator.generate_page_url_list!
     export_directory = @export_strategy.export!(url_list, @drupal_host, @export_directory)
 
+    @page_url_list_generator.save_sitemap(@page_url_list_generator.fetch_sitemap_contents,
+                                          File.join(export_directory, 'sitemap.xml'))
+
     if !@rsync_destination.nil? and !@rsync_destination.empty?
-      @rsync_handler.rsync_static_export(export_directory, @rsync_destination)
+      @rsync_handler.rsync_static_export(export_directory, @rsync_destination, true)
     else
       @log.info('No rsync destination specified. Not performing rsync of export.')
     end
@@ -45,6 +50,7 @@ class Export
 end
 
 @DEFAULT_EXPORT_LOCATION = "/export"
+@DEFAULT_EXPORT_ARCHIVE_LOCATION = "/export/export-archives"
 
 if $0 == __FILE__
 
@@ -59,7 +65,7 @@ if $0 == __FILE__
   cron_invoker = CronInvoker.new(drupal_host)
   page_url_list_generator = DrupalPageUrlListGenerator.new(drupal_host, @DEFAULT_EXPORT_LOCATION)
   export_strategy = HttrackExportStrategy.new(process_runner, ExportInspector.new)
-  rsync_handler = StaticExportRsync.new(process_runner)
+  rsync_handler = StaticExportRsync.new(process_runner, ExportArchiver.new(@DEFAULT_EXPORT_ARCHIVE_LOCATION, ExportArchivePruner.new(@DEFAULT_EXPORT_ARCHIVE_LOCATION)))
   log = DefaultLogger.logger
 
   begin

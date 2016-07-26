@@ -1,7 +1,7 @@
 name: Red Hat JBoss Developer Studio
 abbreviated_name: JBoss Developer Studio
 product_logo: developer-studio.png
-current_version: 10.0.0.GA
+current_version: 10.0.0
 product_category: application-development
 intro_video: https://vimeo.com/95444954
 vimeo_album: http://vimeo.com/album/2982449
@@ -12,6 +12,7 @@ buzz_tags:
 index:
   desc: |
     An Eclipse-based IDE to create apps for web, mobile, transactional enterprise, and SOA-based integration apps/services.
+customer_portal_download_url: https://access.redhat.com/jbossnetwork/restricted/listSoftware.html?product=jbossdeveloperstudio&downloadType=distributions
 guides:
   Release_Notes:
     formats:
