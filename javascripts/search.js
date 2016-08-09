@@ -161,11 +161,11 @@ search.filter('description', function($sce) {
   }
 });
 
-search.controller('SearchController', ['$scope', 'searchService', searchCtrlFunc]);
+search.controller('SearchController', ['$scope','$window', 'searchService', searchCtrlFunc]);
 
-function searchCtrlFunc($scope, searchService) {
+function searchCtrlFunc($scope, $window, searchService) {
 
-  var isSearch = !!window.location.href.match(/\/search\//);
+  var isSearch = !!window.location.href.match(/\/search/);
   var searchTerm = window.location.search.split('=');
   var q = '';
 
@@ -178,13 +178,14 @@ function searchCtrlFunc($scope, searchService) {
     from: 0,
     sys_type: [],
     project: '',
-    newFirst: false
+    newFirst: true
   };
 
   // Search Page Specifics
   if(isSearch && searchTerm) {
     $scope.params.query = decodeURIComponent(searchTerm.pop().replace(/\+/g,' '));
     $scope.params.type = 'rht_website';
+    $scope.params.newFirst = false;
   }
 
   $scope.paginate = {
@@ -213,8 +214,8 @@ function searchCtrlFunc($scope, searchService) {
         delete params.publish_date_to;
       }
 
-      // if relevance is "most recent" is turned on, set newFirst to true, otherwise remove it entirely
-      if(params.newFirst !== "true") {
+      // if relevance filter is turned on making newFirst == false, remove it entirely
+      if(params.newFirst == "false") {
         delete params.newFirst;
       }
 
@@ -235,7 +236,8 @@ function searchCtrlFunc($scope, searchService) {
     $scope.query = $scope.params.query; // this is static until the update re-runs
     var params = $scope.cleanParams($scope.params);
     if(isSearch) {
-      history.pushState($scope.params,$scope.params.query,app.baseUrl + '/search/?q=' + $scope.params.query);
+      searchPage = $window.location.pathname.endsWith('.html') ? '/search.html' : '/search/'
+      history.pushState($scope.params,$scope.params.query,app.baseUrl + searchPage + '?q=' + $scope.params.query);
     }
     searchService.getSearchResults(params).then(function(data) {
       $scope.results = data.hits.hits;

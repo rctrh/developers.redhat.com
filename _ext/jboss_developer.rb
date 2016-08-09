@@ -1,3 +1,4 @@
+require 'cgi'
 require 'uri'
 require 'aweplug/helpers/cdn'
 require 'aweplug/helpers/resources'
@@ -85,7 +86,7 @@ module JBoss
       def transform site, page, content
         if page.output_extension.include?('htm')
           # Strip trailing slashes for drupal export
-          doc = Nokogiri::HTML(content)
+          doc = Nokogiri::HTML::DocumentFragment.parse(content, Encoding::UTF_8.to_s)
 
           doc.css('a').each do |a|
             if a['href'] && a['href'].end_with?('/')
@@ -93,6 +94,7 @@ module JBoss
             end
           end
           mod_content = doc.to_html
+
           mod_content.freeze
 
           resp = @drupal.send_page page, mod_content
@@ -418,7 +420,7 @@ module Aweplug
                    _links: {type: {href: File.join(@base_url, '/rest/type/node/', drupal_type)}},
                    body: [{value: content,
                            summary: page.description,
-                           format: 'full_html'}],
+                           format: (page.drupal_format || 'full_html')}],
                            path: {alias: File.join('/', path)}
         }
         if page.drupal_type == 'rhd_solution_overview'

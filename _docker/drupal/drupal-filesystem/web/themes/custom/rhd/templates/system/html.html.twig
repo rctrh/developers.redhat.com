@@ -75,6 +75,7 @@
 {% if (rhd_dtm_code) %}
   <script type="text/javascript">_satellite.pageBottom();</script>
 {% endif %}
+ {{ page_top}}
  <div class="site-wrapper">
     <header class="main clearfix">
         <div class="row header-wrap">
@@ -84,19 +85,22 @@
                     <li class="register"><a>Register</a></li>
                     <li class="logged-in"><a class="logged-in-name" href="#"></a></li>
                     <li class="logged-in"><a class="logout" href="#">Logout</a></li>
-                    <li class="search-wrapper">
-                      <form class="search-bar" accept-charset="utf-8" action="/search" method="get" role="search" type="submit">
-                        <input class="user-search" type="text" placeholder="Enter your search term" id="search_list_text" name="q" maxlength="128" required/>
-                        <button type="submit" id="search-button">
-                          <i class="fa fa-search"></i>
-                        </button>
-                      </form>
-                    </li>
+                    {% if not(head_title['title'] matches '/Search/') %}
+                      <li class="search-wrapper">
+                        <form class="search-bar" accept-charset="utf-8" action="/search" method="get" role="search" type="submit">
+                          <input class="user-search" type="text" placeholder="Enter your search term" id="search_list_text" name="q" maxlength="128" required/>
+                          <button type="submit" id="search-button">
+                            <i class="fa fa-search"></i>
+                          </button>
+                        </form>
+                      </li>
+                    {% endif %}
                 </ul>
             </nav>
         <div class="logo-wrap">
           <h1 class="logo">
-            <a href="/" title="Red Hat Developers"><img alt="Red Hat Developers" src="/images/design/RHD-logo.svg" /></a>
+            <!-- Do not remove the 'home-link' id from this <a> tag -->
+            <a id="home-link" href="/" title="Red Hat Developers"><img alt="Red Hat Developers" src="/images/design/RHD-logo.svg" /></a>
           </h1>
           <a class="nav-toggle" href="#">Menu<i class="fa fa-angle-down"></i></a>
         </div>
@@ -182,7 +186,6 @@
             </nav>
         </div>
     </header>
-    {{ page_top}}
     <div class="wrapper clearfix">
       <div class="content-wrapper">
         {{ page }}
